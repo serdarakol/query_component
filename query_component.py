@@ -8,7 +8,7 @@ from google.cloud import storage
 
 # Environment variables
 PROMETHEUS_URL = os.environ.get("PROMETHEUS_URL", "http://localhost:9090/api/v1/query")
-QUERY_LIST = json.loads(os.environ.get("QUERY_LIST", '["rate(metric_0[1m])"]'))
+QUERY_LIST = os.environ.get("QUERY_LIST", ["rate(metric_0[1m])"])
 EXPERIMENT_ID = os.environ.get("EXPERIMENT_ID", "default")
 LOG_FILE = os.environ.get("LOG_FILE", "query_logs.json")
 QUERY_INTERVAL = int(os.environ.get("QUERY_INTERVAL", 1))
