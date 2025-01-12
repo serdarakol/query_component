@@ -7,12 +7,12 @@ import random
 
 # Environment variables
 PROMETHEUS_URL = os.environ.get("PROMETHEUS_URL", "http://localhost:9090/api/v1/query")
-QUERY_LIST = os.environ.get("QUERY_LIST", ["rate(metric_0[1m])"])
+QUERY_LIST = json.loads(os.environ.get("QUERY_LIST", "[\"rate(metric_0[1m])\"]"))
 LOG_FILE = os.environ.get("LOG_FILE", "query_logs.json")
 QUERY_INTERVAL = int(os.environ.get("QUERY_INTERVAL", 1))
 EXPERIMENT_DURATION = int(os.environ.get("EXPERIMENT_DURATION", 60))
 SEED = int(os.environ.get("SEED", 42))
-
+print(f"Query list: {QUERY_LIST}")
 random.seed(SEED)
 
 
@@ -22,6 +22,8 @@ class QueryComponent:
         self.interval = QUERY_INTERVAL
         self.duration = EXPERIMENT_DURATION
         self.log_file = LOG_FILE
+        print(f"Queries: {self.queries}")
+        print(f"type of queries: {type(self.queries)}")
 
     def execute_query(self, query):
         t0 = int(time.time() * 1000)
