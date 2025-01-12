@@ -5,6 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
+query_logs.json
 
 # Distribution / packaging
 .Python
