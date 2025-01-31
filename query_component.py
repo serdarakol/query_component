@@ -75,7 +75,6 @@ class QueryComponent:
 
     def run(self):
         threads = []
-        logs = []
 
         for _ in range(self.num_threads):
             t = threading.Thread(target=self.query_worker)
@@ -86,7 +85,7 @@ class QueryComponent:
             t.join()
 
         with open(self.log_file, 'w') as f:
-            json.dump(logs, f, indent=4)
+            json.dump(self.logs, f, indent=4)
 
 if __name__ == "__main__":
     component = QueryComponent()
