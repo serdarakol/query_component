@@ -33,7 +33,7 @@ class QueryComponent:
     def execute_query(self, query):
         t0 = int(time.time() * 1000)
         try:
-            response = requests.get(PROMETHEUS_URL, params={"query": query})
+            response = requests.get(PROMETHEUS_URL, params={"query": query}, timeout=60)
             t1 = int(time.time() * 1000)
             latency_ms = response.elapsed.total_seconds() * 1000
             result = {
@@ -48,13 +48,23 @@ class QueryComponent:
             else:
                 result["error"] = f"Non-200 response: {response.status_code}"
             return result
+        except requests.exceptions.Timeout:
+            t1 = int(time.time() * 1000)
+            return {
+                "query": query,
+                "request_timestamp_ms": t0,
+                "respond_timestamp_ms": t1,
+                "status_code": 408,
+                "latency_ms": t1 - t0,
+                "error": "Query timed out"
+            }
         except requests.exceptions.RequestException as e:
             t1 = int(time.time() * 1000)
             return {
                 "query": query,
                 "request_timestamp_ms": t0,
                 "respond_timestamp_ms": t1,
-                "status_code": None,
+                "status_code": 500,
                 "latency_ms": None,
                 "error": str(e)
             }
